@@ -13,7 +13,13 @@ class TaskListCreate(generics.ListCreateAPIView):
     pagination_class=TasksPagination
     filterset_class=TaskFilter
 
+    def get_permissions(self):
+        if self.request.method=='GET':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
 class TaskRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes=[IsAuthenticated]
     serializer_class= TaskSerializer
     queryset=TaskModel.objects.all()
     lookup_field='pk'
@@ -21,6 +27,4 @@ class TaskRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
 class AccountCreate(generics.CreateAPIView):
     serializer_class=AccountSerializers
     queryset=User.objects.all()
-
-
 
