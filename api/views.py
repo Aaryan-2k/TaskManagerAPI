@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from .paginations import TasksPagination
 from .filters import TaskFilter
 
-
 class TaskListCreate(generics.ListCreateAPIView):
     serializer_class= TaskSerializer
     queryset=TaskModel.objects.all()
@@ -29,6 +28,7 @@ class TaskRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
         return [IsAuthenticated()]
 
 class AccountCreate(generics.CreateAPIView):
+    permission_classes=[AllowAny]
     serializer_class=AccountSerializers
     queryset=User.objects.all()
 

@@ -18,7 +18,7 @@ A RESTful API for managing tasks with user authentication, built using Django RE
 ### Tasks
 - GET `/api/tasks/` - List all tasks (paginated) (Public)
 - POST `/api/tasks/` - Create a new task 🔒
-- GET `/api/tasks/{id}/` - Get a specific task 🔒 
+- GET `/api/tasks/{id}/` - Get a specific task (Public)
 - PUT `/api/tasks/{id}/` - Update a task 🔒 
 - DELETE `/api/tasks/{id}/` - Delete a task 🔒
 
@@ -135,6 +135,21 @@ Response:
         },
         ...
     ]
+}
+```
+### Get a specific Task
+```bash
+curl -X PUT http://localhost:8000/api/tasks/1/ \
+```
+Response:
+```json
+{
+    "id": 1,
+    "title": "Specific Task",
+    "description": "Description",
+    "completed": true,
+    "created_at": "2025-10-24T10:30:00Z",
+    "updated_at": "2025-10-24T11:00:00Z"
 }
 ```
 
