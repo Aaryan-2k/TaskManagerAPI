@@ -6,8 +6,8 @@ from rest_framework.exceptions import ValidationError
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskModel
-        fields = ['id','title','description','completed','created_at','updated_at']
-        read_only_fields = ['id','created_at','updated_at']
+        fields = ['id','user','title','description','completed','created_at','updated_at']
+        read_only_fields = ['id','user','created_at','updated_at']
 
 class AccountSerializers(serializers.ModelSerializer):
     password=serializers.CharField(min_length=8, write_only=True,error_messages={
