@@ -7,6 +7,7 @@ A RESTful API for managing tasks with user authentication, built using Django RE
 - Pagination
 - Filtering by completion status
 - User registration and login
+- Comprehensive test suite
 
 ## API Endpoints
 
@@ -16,9 +17,9 @@ A RESTful API for managing tasks with user authentication, built using Django RE
 - POST `/api/token/refresh/` - Refresh JWT token (Public)
 
 ### Tasks
-- GET `/api/tasks/` - List all tasks (paginated) (Public)
+- GET `/api/tasks/` - List all tasks (paginated) 🔒
 - POST `/api/tasks/` - Create a new task 🔒
-- GET `/api/tasks/{id}/` - Get a specific task (Public)
+- GET `/api/tasks/{id}/` - Get a specific task 🔒
 - PUT `/api/tasks/{id}/` - Update a task 🔒 
 - DELETE `/api/tasks/{id}/` - Delete a task 🔒
 
@@ -51,6 +52,25 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
+
+## Running Tests
+
+The application includes comprehensive test coverage for all major functionality. To run the tests:
+
+```bash
+# Run all tests
+python manage.py test
+
+# Run specific test class
+python manage.py test api.tests.AuthenticationTests
+```
+
+The test suite includes:
+- Authentication Tests (registration, login, token generation)
+- Task API Tests (CRUD operations)
+- Task Filter Tests (completion status filtering)
+- Pagination Tests
+- Permission Tests
 
 ## API Usage Examples
 
@@ -92,7 +112,9 @@ curl -X POST http://localhost:8000/api/tasks/ \
 
 ### List Tasks (with pagination)
 ```bash
-curl -X GET http://localhost:8000/api/tasks/?page_num=1
+curl -X GET http://localhost:8000/api/tasks/?page_num=1 \
+  -H "Authorization: Bearer <your_access_token>"
+```
 ```
 Response:
 ```json
@@ -103,6 +125,7 @@ Response:
     "results": [
         {
             "id": 1,
+            "user": 1,
             "title": "Test Task",
             "description": "Test Description",
             "completed": false,
@@ -116,7 +139,9 @@ Response:
 
 ### Filter Tasks by Completion Status
 ```bash
-curl -X GET http://localhost:8000/api/tasks/?is_completed=true
+curl -X GET http://localhost:8000/api/tasks/?is_completed=true \
+  -H "Authorization: Bearer <your_access_token>"
+
 ```
 Response:
 ```json
@@ -127,6 +152,7 @@ Response:
     "results": [
         {
             "id": 2,
+            "user": 1,
             "title": "Completed Task",
             "description": "This task is done",
             "completed": true,
@@ -139,12 +165,15 @@ Response:
 ```
 ### Get a specific Task
 ```bash
-curl -X PUT http://localhost:8000/api/tasks/1/ \
+curl -X GET http://localhost:8000/api/tasks/1/ \
+  -H "Authorization: Bearer <your_access_token>"
+
 ```
 Response:
 ```json
 {
     "id": 1,
+    "user": 1,
     "title": "Specific Task",
     "description": "Description",
     "completed": true,
@@ -164,6 +193,7 @@ Response:
 ```json
 {
     "id": 1,
+    "user": 1,
     "title": "Updated Task",
     "description": "Updated Description",
     "completed": true,
