@@ -11,21 +11,22 @@ class TaskListCreate(generics.ListCreateAPIView):
     queryset=TaskModel.objects.all()
     pagination_class=TasksPagination
     filterset_class=TaskFilter
+    permission_classes=[IsAuthenticated]
 
-    def get_permissions(self):
-        if self.request.method=='GET':
-            return [AllowAny()]
-        return [IsAuthenticated()]
+    def get_queryset(self):
+        return TaskModel.objects.filter(user=self.request.user).order_by('-created_at')
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class TaskRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
     serializer_class= TaskSerializer
     queryset=TaskModel.objects.all()
     lookup_field='pk'
+    permission_classes=[IsAuthenticated]
 
-    def get_permissions(self):
-        if self.request.method=='GET':
-            return [AllowAny()]
-        return [IsAuthenticated()]
+    def get_queryset(self):
+        return TaskModel.objects.filter(user=self.request.user).order_by('-created_at')
 
 class AccountCreate(generics.CreateAPIView):
     permission_classes=[AllowAny]
